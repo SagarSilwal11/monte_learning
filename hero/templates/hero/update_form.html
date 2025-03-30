@@ -1,0 +1,12 @@
+{% extends "hero/base.html"%}
+{% block title%}
+    <title>Update</title>
+{% endblock title%}
+{% block content%}
+    <form action="" method="POST" enctype='multipart/form-data'>
+        {% csrf_token %}
+        {{form.as_p}}
+
+<button type="submit">Submit</button>
+    </form>
+{% endblock content%}
