@@ -1,0 +1,45 @@
+{% extends "hero/base.html" %}
+{% block title%}
+    <title>POST</title>
+{% endblock%}
+
+{% block content%}
+<form action="" method="POST" novalidate enctype='multipart/form-data' >
+
+    {% csrf_token %}
+{{form.as_p}}
+
+<button type='submit'>Submit</button>
+</form>
+<br>
+<br>
+<h1>Overview</h1>
+<table border="1" >
+    <tr>
+        <th>id</th>
+        <th>heading</th>
+        <th>content</th>
+        <th>image</th>
+        <th>created_at</th>
+        <th>updated_at</th>
+        <th>is_featured</th>
+        <th>is_status</th>
+    </tr>
+    {% for post in featured%}
+    <tr>
+        <td>{{post.id}}</td>
+        <td>{{post.heading}}</td>
+        <td>{{post.content}}</td>
+        <td>{{post.image}}</td>
+        <td>{{post.created_at}}</td>
+        <td>{{post.updated_at}}</td>
+        <td>{{post.is_featured}}</td>
+        <td>{{post.is_status}}</td>
+
+    </tr>
+    {% endfor%}
+</table>
+
+
+{% endblock content%}
+
