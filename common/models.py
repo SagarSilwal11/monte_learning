@@ -1,11 +1,12 @@
 from django.db import models
 from django.core.validators import MinLengthValidator
-
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import GenericForeignKey
 
 class BaseContent(models.Model):
     heading = models.CharField(max_length=200,validators=[MinLengthValidator(5)])
     content = models.TextField(validators=[MinLengthValidator(10)])
-    image = models.ImageField(upload_to='images/', blank=True, null=True)
+    # image = models.ImageField(upload_to='images/', blank=True, null=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -23,5 +24,19 @@ class BaseContent(models.Model):
         """Exclude fields dynamically if needed."""
         excluded_fields = getattr(self.__class__, "excluded_fields", [])
         return {field.name: field for field in self._meta.fields if field.name not in excluded_fields}
+
+class Image(models.Model):
+    url=models.ImageField(upload_to="images/")
+    created_at=models.DateTimeField(auto_now_add=True)
+    updated_at=models.DateTimeField(auto_now=True)
+    
+
+
+class ImageContent(models.Model):
+    content_type=models.ForeignKey(ContentType,on_delete=models.CASCADE)
+    object_id=models.PositiveIntegerField()
+    content_object=GenericForeignKey("content_type","object_id")
+    image=models.ForeignKey(Image,on_delete=models.CASCADE)
+
 
 

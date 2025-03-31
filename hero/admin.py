@@ -6,7 +6,7 @@ from django.db.models import Q
 admin.site.site_header="Custom Admin"
 @admin.register(Hero)
 class HeroModeladmin(admin.ModelAdmin):
-    list_display=["id",'heading','content','image','created_at','updated_at','is_featured','status']
+    list_display=["id",'heading','content','created_at','updated_at','is_featured','status']
     list_filter=['is_featured','status']
 
   

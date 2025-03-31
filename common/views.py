@@ -86,5 +86,8 @@ class AssignGroupApi(viewsets.ViewSet):
         serializers=AssignGroupSerializer(data=request.data)
         if serializers.is_valid():
             serializers.save()
-            return Response({"message":'Group Assign sucessfully'},status=status.HTTP_200_OK)
+            return Response({"message":'Group Assign sucessfully'},xstatus=status.HTTP_200_OK)
         return Response(serializers.errors,status=status.HTTP_400_BAD_REQUEST)
+
+
+
