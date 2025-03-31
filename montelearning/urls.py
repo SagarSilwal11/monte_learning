@@ -6,8 +6,8 @@ from django.conf import settings
 from rest_framework.routers import DefaultRouter
 
 from facilities.views import FacilityApi
-from about.views import AboutApi
-from career.views import CareerModelApi
+# from about.views import AboutApi
+# from career.views import CareerModelApi
 from activities.views import ActivityApi
 
 

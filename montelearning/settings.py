@@ -16,7 +16,7 @@ SECRET_KEY = "django-insecure-)bf=mdu_&@xb!px+%g)z4u21#7w3q42&tb9hsseoui@c577w$b
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['montessori.website','localhost','127.0.0.1']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -31,14 +31,14 @@ INSTALLED_APPS = [
     'common',
     "hero",
     'facilities',
-    "about",
-    "career",
+    # "about",
+    # "career",
     'activities',
     'contact',
     "rest_framework",
     "rest_framework_simplejwt",
     "phonenumber_field",
-    "user",
+    # "user",
     "corsheaders",
 ] 
 
@@ -78,14 +78,20 @@ WSGI_APPLICATION = "montelearning.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'pratice', 
+#         'USER': 'test', 
+#         'PASSWORD': 'Sagar@1234',
+#         'HOST': 'localhost',   
+#         'PORT': '3306',  
+#     }
+# }
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'pratice', 
-        'USER': 'test', 
-        'PASSWORD': 'Sagar@1234',
-        'HOST': 'localhost',   
-        'PORT': '3306',  
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
 
