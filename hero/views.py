@@ -26,7 +26,7 @@ class HeroApi(APIView):
     def get(self, request, pk=None):
         if pk is None:
             try:
-                heroes = Hero.objects.all()
+                heroes = Hero.objects.all().order_by("-id")
                 if not heroes:
                     return Response({'detail': 'No heroes found'}, status=status.HTTP_404_NOT_FOUND)
                 serializer = HeroSerializers(heroes, many=True,context={"request":request})
