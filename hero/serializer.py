@@ -1,8 +1,10 @@
 from rest_framework import serializers
 from hero.models import Hero
 from django.core.exceptions import ValidationError
+from common.models import ImageContent
+
+
 class HeroSerializers(serializers.ModelSerializer):
-    image=serializers.ImageField(use_url=True)
     class Meta:
         model=Hero
         fields="__all__"
@@ -13,3 +15,8 @@ class HeroSerializers(serializers.ModelSerializer):
         if len(value) > 200:
             raise ValidationError("Please provide a content shorter than 200 characters.")
         return value
+
+class ImageContentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=ImageContent
+        fields=["url"]
