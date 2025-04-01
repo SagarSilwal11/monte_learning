@@ -25,16 +25,20 @@ class BaseContent(models.Model):
         excluded_fields = getattr(self.__class__, "excluded_fields", [])
         return {field.name: field for field in self._meta.fields if field.name not in excluded_fields}
 
-
+class Image(models.Model):
+    image=models.ImageField(upload_to='images/')
+    uploaded_at=models.DateTimeField(auto_now_add=True)
     
-    
+    def __str__(self):
+        return str(self.image)
 
 
 class ImageContent(models.Model):
-    url=models.ImageField(upload_to="images/",default="")
+    
     content_type=models.ForeignKey(ContentType,on_delete=models.CASCADE)
     object_id=models.PositiveIntegerField()
     content_object=GenericForeignKey("content_type","object_id")
+    image=models.ForeignKey(Image,on_delete=models.CASCADE)
    
 
 
