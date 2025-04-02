@@ -28,8 +28,8 @@ class HeroSerializers(serializers.ModelSerializer):
 
     def get_images(self,obj):
         content_type=ContentType.objects.get_for_model(Hero)
-        images=ImageContent.objects.filter(content_type=content_type,image_id=obj.id)
-        return ImageContentSerializer(images,many=True).data
+        images=ImageContent.objects.filter(content_type=content_type,object_id=obj.id)
+        return [image.image.image.url for image in images]
 
 
     def validate_content(self,value):

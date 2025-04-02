@@ -17,16 +17,9 @@ class HeroApi(APIView):
             hero_data=[]
             for hero in heroes:
                 hero_serializer = HeroSerializers(hero, context={'request': request})
-                
-                # Fetch images for the hero
-                images = ImageContent.objects.filter(content_type=ContentType.objects.get_for_model(Hero), object_id=hero.id)
-                image_serializer = ImageContentSerializer(images, many=True, context={'request': request})
+                hero_data.append(hero_serializer.data)
 
-                hero_data.append({
-                    "hero": hero_serializer.data,
-                    "images": image_serializer.data
-                })
-
+             
             return Response(hero_data, status=status.HTTP_200_OK)
 
         else:
@@ -35,14 +28,8 @@ class HeroApi(APIView):
                 hero = Hero.objects.get(pk=pk)
                 hero_serializer = HeroSerializers(hero, context={'request': request})
 
-                # Fetch images for the specific hero
-                images = ImageContent.objects.filter(content_type=ContentType.objects.get_for_model(Hero), object_id=hero.id)
-                image_serializer = ImageContentSerializer(images, many=True, context={'request': request})
-
-                return Response({
-                    "hero": hero_serializer.data,
-                    "images": image_serializer.data
-                }, status=status.HTTP_200_OK)
+                return Response(
+                    hero_serializer.data, status=status.HTTP_200_OK)
 
             except Hero.DoesNotExist:
                 return Response({'message': "Hero not found"}, status=status.HTTP_404_NOT_FOUND)
