@@ -1,5 +1,5 @@
 from django.contrib import admin
-from common.models import ImageContent,Image
+from common.models import ImageContent,Image,Icon
 # Register your models here.
 
 
@@ -11,3 +11,8 @@ class ImageModelAdmin(admin.ModelAdmin):
 @admin.register(ImageContent)
 class ImageContentaModelAdmin(admin.ModelAdmin):
     list_display=["id","content_type","object_id","content_object","image"]
+
+
+@admin.register(Icon)
+class IconModelAdmin(admin.ModelAdmin):
+    list_display=['id','name','icon_file']

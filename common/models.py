@@ -41,5 +41,9 @@ class ImageContent(models.Model):
     image=models.ForeignKey(Image,on_delete=models.CASCADE)
    
 
+class Icon(models.Model):
+    name=models.CharField(max_length=100,unique= True)
+    icon_file=models.ImageField(upload_to="icons/")
 
-
+    def __str__(self):
+        return self.name
