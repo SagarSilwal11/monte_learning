@@ -1,24 +1,13 @@
-# from django.shortcuts import render,redirect,get_object_or_404
-# from django.http import HttpResponse
-# from .forms import HeroForm
-# from .serializer import HeroSerializers
-# from .models import Hero
-# from rest_framework.viewsets import ModelViewSet
-# from rest_framework_simplejwt.authentication import JWTAuthentication
-# from rest_framework.permissions import IsAuthenticated
-# from rest_framework.renderers import JSONRenderer,BrowsableAPIRenderer
-# class HeroApi(ModelViewSet):
-
-#     queryset=Hero.objects.all()
-#     serializer_class=HeroSerializers
-#     renderer_classes=[JSONRenderer,BrowsableAPIRenderer]
-   
-
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from hero.models import Hero
 from hero.serializer import HeroSerializers
+from rest_framework import status
+from common.pagination import CustomPageNumberPagination
+
+
+
 
 class HeroApi(APIView):
     serializer_class = HeroSerializers
@@ -26,11 +15,53 @@ class HeroApi(APIView):
     def get(self, request, pk=None):
         if pk is None:
             try:
-                heroes = Hero.objects.all()
+                heroes = Hero.objects.all().order_by("-id")
+                # Only sort by 'created_at' if passed in query params
+                created_at=request.query_params.get("created_at",None)
+                if created_at:
+                    if created_at=="latest":
+                        heroes=heroes.order_by("-created_at")
+                    elif created_at=="oldest":
+                        heroes=heroes.order_by("created_at")
+                    elif created_at=="ascending":
+                        heroes=heroes.order_by("heading")
+                    elif created_at=="descending":
+                        heroes=heroes.order_by("-heading")
+                
+                status_filter=request.query_params.get("status",None)
+                if status_filter is not None:
+                    try:
+                        if status_filter.lower()=='true':
+                            heroes=heroes.filter(status=True)
+                        elif status_filter.lower()=='false':
+                            heroes=heroes.filter(status=False)
+                        else:
+                            return Response ({"detail":'Invalid value for status'},status=status.HTTP_400_BAD_REQUEST)
+                    except:
+                        return Response({'detail':"Invalid value"},status=status.HTTP_400_BAD_REQUEST)
+                
+                featured_filter=request.query_params.get("is_featured",None)
+                if featured_filter is not None:
+                    try:
+                        if featured_filter.lower()=='true':
+                            heroes=heroes.filter(is_featured=True)
+                        elif featured_filter.lower()=='false':
+                            heroes=heroes.filter(is_featured=False)
+                        else:
+                            return Response({
+                                'detail':'Invalid value for the featured'
+                            },status=status.HTTP_400_BAD_REQUEST)
+                    except:
+                        return Response({'detail':"Invalid value"},status=status.HTTP_400_BAD_REQUEST)
+
+                
                 if not heroes:
                     return Response({'detail': 'No heroes found'}, status=status.HTTP_404_NOT_FOUND)
-                serializer = HeroSerializers(heroes, many=True,context={"request":request})
-                return Response(serializer.data, status=status.HTTP_200_OK)
+                #applying the paginator
+                paginator=CustomPageNumberPagination()
+                paginated_queryset=paginator.paginate_queryset(heroes,request)
+                serializer = HeroSerializers(paginated_queryset, many=True,context={"request":request})
+                return paginator.get_paginated_response(serializer.data)
             except Exception as e:
                 return Response({'detail': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
@@ -81,7 +112,7 @@ class HeroApi(APIView):
         try:
             hero = Hero.objects.get(id=pk)
             hero.delete()
-            return Response({'detail': 'Hero deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+            return Response({'detail': 'Hero deleted successfully'}, status=status.HTTP_200_OK)
         except Hero.DoesNotExist:
             return Response({'detail': 'Hero not found'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
