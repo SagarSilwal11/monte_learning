@@ -18,10 +18,10 @@ from rest_framework_simplejwt.views import TokenObtainPairView,TokenRefreshView,
 
 urlpatterns = [
     # path('api/',include(router.urls)),
-    path("gettoken/",TokenObtainPairView.as_view(),name="token_obtain_view"),
-    path("refreshtoken/",TokenRefreshView.as_view(),name="token_refresh"),
-    path("verifytoken/",TokenVerifyView.as_view(),name="token_verify"),
-    path("common/gettoken/", CustomTokenObtainPairView.as_view(), name="token_obtain_view"),
-    path("api/all/",CommonApi.as_view(),name='common')
+    path("gettoken",TokenObtainPairView.as_view(),name="token_obtain_view"),
+    path("refreshtoken",TokenRefreshView.as_view(),name="token_refresh"),
+    path("verifytoken",TokenVerifyView.as_view(),name="token_verify"),
+    path("common/gettoken", CustomTokenObtainPairView.as_view(), name="token_obtain_view"),
+    path("api/all",CommonApi.as_view(),name='common')
 
 ]
