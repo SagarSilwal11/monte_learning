@@ -13,7 +13,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView,TokenRefreshView,
 
 # router=DefaultRouter()
 # router.register("commonapi",CommonApi,basename='combined')
-# router.register('permission',AssignPermissionApi,basename="permission")
+# router.registe('permission',AssignPermissionApi,basename="permission")
 # router.register('group',AssignGroupApi,basename='group')
 
 urlpatterns = [
