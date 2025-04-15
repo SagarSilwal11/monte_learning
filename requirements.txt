@@ -3,6 +3,7 @@ certifi==2025.1.31
 cffi==1.17.1
 chardet==5.2.0
 charset-normalizer==3.4.1
+click==8.1.8
 cryptography==44.0.1
 cssselect2==0.7.0
 defusedxml==0.7.1
@@ -11,6 +12,7 @@ Django==4.2.10
 django-admin-soft-dashboard==1.0.24
 django-classy-tags==3.0.1
 django-cms==3.8.2
+django-cors-headers==4.7.0
 django-filer==3.0.3
 django-formtools==2.4
 django-js-asset==2.0.0
@@ -34,6 +36,8 @@ djangocms-video==3.1.0
 djangorestframework==3.15.2
 djangorestframework_simplejwt==5.4.0
 easy-thumbnails==2.9
+gunicorn==23.0.0
+h11==0.14.0
 html5lib==1.1
 httpie==3.2.4
 idna==3.10
@@ -42,6 +46,7 @@ markdown-it-py==3.0.0
 mdurl==0.1.2
 multidict==6.1.0
 mysqlclient==2.2.7
+packaging==24.2
 phonenumberslite==8.13.55
 pillow==11.1.0
 pycparser==2.22
@@ -62,4 +67,6 @@ tinycss2==1.4.0
 typing_extensions==4.12.2
 tzlocal==5.3
 urllib3==2.3.0
+uvicorn==0.34.1
 webencodings==0.5.1
+whitenoise==6.9.0
