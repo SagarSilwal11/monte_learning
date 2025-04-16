@@ -3,7 +3,7 @@ from facilities.models import Facilities
 # Register your models here.
 @admin.register(Facilities)
 class FacilityModelAdmin(admin.ModelAdmin):
-    list_display=["id",'heading','content','icon','created_at','updated_at','is_featured','status']
+    list_display=["id",'heading','content','created_at','updated_at','is_featured','status']
     search_fields=['id']
     list_filter=['is_featured','status' ]
 

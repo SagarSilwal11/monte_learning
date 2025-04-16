@@ -2,22 +2,21 @@
 from django.urls import path,include
 from common.views import CommonApi
 from rest_framework.routers import DefaultRouter
-from common.views import AssignGroupApi,AssignPermissionApi,CustomTokenObtainPairView
+from common.views import CustomTokenObtainPairView
 
 # for the token based authentication
 from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework_simplejwt.views import TokenObtainPairView,TokenRefreshView,TokenVerifyView
-
+from common.views import ImageApi
+from rest_framework.routers import DefaultRouter
 # from common.viewsa import CustomTokenObtainView, RefreshAccessTokenView 
 
 
-# router=DefaultRouter()
-# router.register("commonapi",CommonApi,basename='combined')
-# router.registe('permission',AssignPermissionApi,basename="permission")
-# router.register('group',AssignGroupApi,basename='group')
+router=DefaultRouter()
+router.register('imageApi',ImageApi,basename='group')
 
 urlpatterns = [
-    # path('api/',include(router.urls)),
+    path('api/',include(router.urls)),
     path("gettoken",TokenObtainPairView.as_view(),name="token_obtain_view"),
     path("refreshtoken",TokenRefreshView.as_view(),name="token_refresh"),
     path("verifytoken",TokenVerifyView.as_view(),name="token_verify"),

@@ -22,7 +22,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 # For the Permission and Group
 from rest_framework import serializers
 from rest_framework.views import APIView
-from common.serializers import AssignGroupSerializer,AssignPermissionSerializer
+# from common.serializers import AssignGroupSerializer,AssignPermissionSerializer
 from rest_framework import status
 
 # for the custom JWTTOken logic
@@ -38,6 +38,10 @@ from django.views.decorators.csrf import csrf_exempt
 
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.permissions import AllowAny
+from common.models import Image
+from common.serializers import ImageSerailizer
+
+
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     permission_classes = (AllowAny,) 
@@ -71,20 +75,24 @@ class CommonApi(APIView):
 
 
 
-class AssignPermissionApi(viewsets.ViewSet):
-    def create(self,request):
-        serializers=AssignPermissionSerializer(data=request.data)
-        if serializers.is_valid():
-            serializers.save()
-            return Response({'message':'permission assigned sucessfully'},status=status.HTTP_201_CREATED)
-        return Response(serializers.errors,status=status.HTTP_400_BAD_REQUEST)
+# class AssignPermissionApi(viewsets.ViewSet):
+#     def create(self,request):
+#         serializers=AssignPermissionSerializer(data=request.data)
+#         if serializers.is_valid():
+#             serializers.save()
+#             return Response({'message':'permission assigned sucessfully'},status=status.HTTP_201_CREATED)
+#         return Response(serializers.errors,status=status.HTTP_400_BAD_REQUEST)
 
 
-class AssignGroupApi(viewsets.ViewSet):
+# class AssignGroupApi(viewsets.ViewSet):
 
-    def create(self,request):
-        serializers=AssignGroupSerializer(data=request.data)
-        if serializers.is_valid():
-            serializers.save()
-            return Response({"message":'Group Assign sucessfully'},status=status.HTTP_200_OK)
-        return Response(serializers.errors,status=status.HTTP_400_BAD_REQUEST)
+#     def create(self,request):
+#         serializers=AssignGroupSerializer(data=request.data)
+#         if serializers.is_valid():
+#             serializers.save()
+#             return Response({"message":'Group Assign sucessfully'},status=status.HTTP_200_OK)
+#         return Response(serializers.errors,status=status.HTTP_400_BAD_REQUEST)
+
+class ImageApi(viewsets.ModelViewSet):
+    queryset=Image.objects.all()
+    serializer_class=ImageSerailizer   
