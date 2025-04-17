@@ -8,7 +8,7 @@ import os
 
 def upload_to_media(instance, filename):
     folder = 'images' if instance.media_type == 'image' else 'icons'
-    return folder  
+    return  os.path.join(folder,filename)
 
 
 def custom_path(instance,filename):

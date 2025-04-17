@@ -18,6 +18,7 @@ from rest_framework import serializers
 from hero.models import Hero
 from common.models import Image, ImageContent
 from django.contrib.contenttypes.models import ContentType
+from rest_framework.exceptions import ValidationError
 
 class HeroSerializers(serializers.ModelSerializer):
     image_id = serializers.IntegerField(write_only=True, required=False)
@@ -26,6 +27,7 @@ class HeroSerializers(serializers.ModelSerializer):
     class Meta:
         model = Hero
         fields = ['id', 'heading', 'content', 'is_featured', 'status', 'image_id', 'image_data']
+
 
     def get_image_data(self, obj):
         image_link = obj.media_items.filter(relation_type='main_image').first()
@@ -43,10 +45,15 @@ class HeroSerializers(serializers.ModelSerializer):
             }
         return None
 
+    def validate_image_id(self,value):
+        if value and not Image.objects.filter(id=value).exists():
+            raise ValidationError(f"Image with Id {value} doesn't exist")
+        return value 
+    
     def create(self, validated_data):
         image_id = validated_data.pop('image_id', None)
         hero = Hero.objects.create(**validated_data)
-
+        
         if image_id:
             content_type = ContentType.objects.get_for_model(hero)
             ImageContent.objects.create(
@@ -72,7 +79,7 @@ class HeroSerializers(serializers.ModelSerializer):
                 content_type=content_type,
                 object_id=instance.id,
                 image_id=image_id,
-                relation_type='main_image'
+                relation_type='main_image' 
             )
 
         return instance
