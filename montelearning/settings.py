@@ -16,7 +16,7 @@ SECRET_KEY = "django-insecure-)bf=mdu_&@xb!px+%g)z4u21#7w3q42&tb9hsseoui@c577w$b
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['montessori.website','localhost','127.0.0.1','montelearning.onrender.com']
+ALLOWED_HOSTS = ['montessori.website','montelearning.onrender.com']
 
 
 # Application definition
