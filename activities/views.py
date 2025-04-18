@@ -13,8 +13,17 @@ class ActivityApi(APIView):
     # authentication_classes = [JWTAuthentication]
     # permission_classes = [IsAuthenticated]
 
-    def get(self, request, pk=None):
+    def get(self, request, pk=None,slug=None):
         if pk is None:
+            if slug:
+                try:
+                    activity=ActivitiesModel.objects.get(slug=slug)
+                    serializer=ActivitiesModelSerializers(activity)
+                    return Response(serializer.data,status=status.HTTP_200_OK)
+                except Exception as e:
+                    return Response({'error':e},status=status.HTTP_404_NOT_FOUND)
+
+
             try:
                 activities = ActivitiesModel.objects.all()
 

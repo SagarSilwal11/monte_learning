@@ -26,7 +26,9 @@ class HeroSerializers(serializers.ModelSerializer):
 
     class Meta:
         model = Hero
-        fields = ['id', 'heading', 'content', 'is_featured', 'status', 'image_id', 'image_data']
+        fields = ['id', 'heading', 'content','created_at',
+        'updated_at',
+        'is_featured', 'status', 'image_id', 'image_data']
 
 
     def get_image_data(self, obj):
