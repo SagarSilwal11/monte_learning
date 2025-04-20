@@ -3,12 +3,12 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from facilities.models import Facilities
-from facilities.serializers import FacilitySerializer
+from facilities.serializers import FacilitySerializers
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
 
 class FacilityApi(APIView):
-    serializer_class = FacilitySerializer
+    serializer_class = FacilitySerializers
     # authentication_classes = [JWTAuthentication]
     # permission_classes = [IsAuthenticated]
 
@@ -18,14 +18,14 @@ class FacilityApi(APIView):
                 facilities = Facilities.objects.all()
                 if not facilities:
                     return Response({'detail': 'No facilities found'}, status=status.HTTP_404_NOT_FOUND)
-                serializer = FacilitySerializer(facilities, many=True,context={'request': request})
+                serializer = FacilitySerializers(facilities, many=True,context={'request': request})
                 return Response(serializer.data, status=status.HTTP_200_OK)
             except Exception as e:
                 return Response({'detail': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
             try:
                 facility = Facilities.objects.get(id=pk)
-                serializer = FacilitySerializer(facility,context={'request': request})
+                serializer = FacilitySerializers(facility,context={'request': request})
                 return Response(serializer.data, status=status.HTTP_200_OK)
             except Facilities.DoesNotExist:
                 return Response({'detail': 'Facility not found'}, status=status.HTTP_404_NOT_FOUND)
@@ -34,7 +34,7 @@ class FacilityApi(APIView):
 
     def post(self, request):
         try:
-            serializer = FacilitySerializer(data=request.data)
+            serializer = FacilitySerializers(data=request.data)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -48,7 +48,7 @@ class FacilityApi(APIView):
         except Facilities.DoesNotExist:
             return Response({'detail': 'Facility not found'}, status=status.HTTP_404_NOT_FOUND)
         
-        serializer = FacilitySerializer(facility, data=request.data)
+        serializer = FacilitySerializers(facility, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -62,7 +62,7 @@ class FacilityApi(APIView):
         except Exception as e:
             return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
-        serializer = FacilitySerializer(facility, data=request.data, partial=True)
+        serializer = FacilitySerializers(facility, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)

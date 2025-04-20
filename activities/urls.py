@@ -1,5 +1,5 @@
 from django.urls import path
-from activities.views import ActivityApi
+from activities.views import ActivityApi,ActivityApiDetails
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -14,7 +14,7 @@ urlpatterns = [
     path("activityapi/<int:pk>",ActivityApi.as_view(),name="activity_list"),
    
     path("activityapi/create",ActivityApi.as_view(),name="activity_create"),
-    path("activityapi/<slug:slug>",ActivityApi.as_view(),name="activity_slug"),
+    path("activityapi/<slug:slug>",ActivityApiDetails.as_view(),name="activity_slug"),
     path("activityapi/update/<int:pk>",ActivityApi.as_view(),name="activity_update"),
     path("activityapi/patch/<int:pk>",ActivityApi.as_view(),name="activity_updates"),
     path("activityapi/delete/<int:pk>",ActivityApi.as_view(),name="activity_delete"),

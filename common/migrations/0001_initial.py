@@ -41,7 +41,7 @@ class Migration(migrations.Migration):
                         blank=True,
                         null=True,
                         upload_to=common.models.upload_to_media,
-                        validators=[common.validators.validate_file],
+                        validators=[common.validators.validate_image_file],
                     ),
                 ),
                 (

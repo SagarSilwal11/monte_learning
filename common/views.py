@@ -12,7 +12,7 @@ from contact.models import ContactModel
 
 # importing the serializers
 from hero.serializer import HeroSerializers
-from facilities.serializers import FacilitySerializer
+from facilities.serializers import FacilitySerializers
 from activities.serializers import ActivitiesModelSerializers
 from contact.serializers import ContactSerializers
 from rest_framework.authentication import TokenAuthentication
@@ -40,7 +40,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.permissions import AllowAny
 from common.models import Image
 from common.serializers import ImageSerailizer
-
+from django.core.exceptions import ValidationError
 
 
 class CustomTokenObtainPairView(TokenObtainPairView):
@@ -58,7 +58,7 @@ class CommonApi(APIView):
         contact=ContactModel.objects.all()
 
         hero_data=HeroSerializers(heros,many=True,context={'request':request}).data
-        facilities_data=FacilitySerializer(facilities,many=True,context={'request':request}).data
+        facilities_data=FacilitySerializers(facilities,many=True,context={'request':request}).data
         activities_data=ActivitiesModelSerializers(activities,many=True,context={'request':request}).data
         contact_data=ContactSerializers(contact,many=True,context={'request':request}).data
     
@@ -96,3 +96,30 @@ class CommonApi(APIView):
 class ImageApi(viewsets.ModelViewSet):
     queryset=Image.objects.all()
     serializer_class=ImageSerailizer   
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            try:
+                # Save the image and handle validation in the model
+                serializer.save()
+                return Response(
+                    {"success": True, "message": "Image uploaded successfully.", "data": serializer.data},
+                    status=status.HTTP_201_CREATED
+                )
+            except ValidationError as e:
+                # Handle validation errors from the model
+                return Response(
+                     e.messages,
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            except Exception as e:
+                # Handle unexpected errors
+                return Response(
+                    {"success": False, "message": "An unexpected error occurred.", "errors": str(e)},
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                )
+        return Response(
+            {"success": False, "message": "Invalid data.", "errors": serializer.errors},
+            status=status.HTTP_400_BAD_REQUEST
+        )

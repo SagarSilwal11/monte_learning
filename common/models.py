@@ -3,7 +3,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey,GenericRelation
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from datetime import datetime
-from common.validators import validate_alt_text,validate_caption,validate_file,validate_image_size,validate_name_length,validation_media
+from common.validators import validate_alt_text,validate_caption,validate_icon_file,validate_icon_size,validate_image_file,validate_image_size,validate_name_length,validation_media,validate_image_dimensions,validate_icon_dimensions
 import os
 
 def upload_to_media(instance, filename):
@@ -22,7 +22,7 @@ class Image(models.Model):
         ('icon', 'Icon'),
     )
     media_type = models.CharField(max_length=10, choices=MEDIA_TYPE_CHOICES,validators=[validation_media])
-    file=models.ImageField(upload_to=upload_to_media,blank=True,null=True,validators=[validate_file])
+    file=models.ImageField(upload_to=upload_to_media,blank=True,null=True)
     name=models.CharField(max_length=255,blank=True,null=True,validators=[validate_name_length])
     # Auto Metadata
     mime_type = models.CharField(max_length=50, blank=True, null=True)
@@ -35,21 +35,40 @@ class Image(models.Model):
     source = models.CharField(max_length=255, blank=True, null=True)
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
-    def save(self,*args,**kwargs):
+    def save(self, *args, **kwargs):
         if self.file:
-            
-            self.original_file_path=self.file.name
-            self.mime_type=self.file.file.content_type
-            self.size=self.file.size
-            self.custom_path=custom_path(self,self.file.name)
-            if not self.name:
-                self.name=self.file.name
-            
-            if not self.alt_text:
-                self.alt_text=f"Image for {self.file.name}"
-            
-        super().save(*args,**kwargs)
-    
+            try:
+                # Set metadata
+                self.original_file_path = self.file.name
+                self.mime_type = self.file.file.content_type
+                self.size = self.file.size
+                self.custom_path = custom_path(self, self.file.name)
+
+                # Set default name and alt text if not provided
+                if not self.name:
+                    self.name = self.file.name
+                if not self.alt_text:
+                    self.alt_text = f"Image for {self.file.name}"
+
+                # Apply validations based on media type
+                if self.media_type == 'image':
+                    validate_image_file(self.file)  # Validate file type for images
+                    validate_image_size(self.file.size)  # Validate file size for images
+                    validate_image_dimensions(self.file)  # Validate dimensions for images
+                elif self.media_type == 'icon':
+                    validate_icon_file(self.file)  # Validate file type for icons
+                    validate_icon_size(self.file.size)  # Validate file size for icons
+                    validate_icon_dimensions(self.file)  # Validate dimensions for icons
+
+                # Save the object if all validations pass
+                super().save(*args, **kwargs)
+
+            except ValidationError as e:
+                # Raise validation error
+                raise ValidationError(f"Validation failed: {e}")
+            except Exception as e:
+                # Raise unexpected error
+                raise ValidationError(f"An unexpected error occurred: {e}")
     def __str__(self):
         return self.name
     
@@ -67,9 +86,9 @@ class ImageContent(models.Model):
         model_name = self.content_type.model
 
         # Validation logic based on model name
-        if model_name == 'facility' and self.image.media_type != 'icon':
+        if model_name == 'facilities' and self.image.media_type != 'icon':
             raise ValidationError("Facility can only be linked with icons.")
-        elif model_name in ['hero', 'activity'] and self.image.media_type != 'image':
+        elif model_name in ['hero', 'activities'] and self.image.media_type != 'image':
             raise ValidationError(f"{model_name.title()} can only be linked with images.")
 
     def save(self, *args, **kwargs):

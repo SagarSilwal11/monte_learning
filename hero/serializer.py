@@ -35,10 +35,12 @@ class HeroSerializers(serializers.ModelSerializer):
         image_link = obj.media_items.filter(relation_type='main_image').first()
         if image_link:
             image = image_link.image
+            request = self.context.get('request')  # Get the request object from the serializer context
+            absolute_url = request.build_absolute_uri(image.file.url) if request else image.file.url
             return {
                 "id": image.id,
                 "name": image.name,
-                "url": image.file.url,
+                "url": absolute_url,
                 "alt_text": image.alt_text,
                 "caption": image.caption,
                 "source": image.source,
