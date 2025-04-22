@@ -15,11 +15,11 @@ urlpatterns = [
 
     # path('contactapi/',ContactApi.as_view(),name='contact-list'),
     # path('contactapi/<int:pk>/',ContactApi.as_view(),name='contact'),
-    path("contactapi/",ContactApi.as_view(),name="contact_list"),
-    path("contactapi/<int:pk>/",ContactApi.as_view(),name="activity_list"),
-    path("contactapi/create/",ContactApi.as_view(),name="activity_create"),
-    path("contactapi/put/<int:pk>/",ContactApi.as_view(),name="activity_update"),
-    path("contactapi/patch/<int:pk>/",ContactApi.as_view(),name="activity_updates"),
-    path("contactapi/delete/<int:pk>/",ContactApi.as_view(),name="activity_delete"),
+    path("contactapi",ContactApi.as_view(),name="contact_list"),
+    path("contactapi/<int:pk>",ContactApi.as_view(),name="activity_list"),
+    path("contactapi/create",ContactApi.as_view(),name="activity_create"),
+    path("contactapi/put/<int:pk>",ContactApi.as_view(),name="activity_update"),
+    path("contactapi/patch/<int:pk>",ContactApi.as_view(),name="activity_updates"),
+    path("contactapi/delete/<int:pk>",ContactApi.as_view(),name="activity_delete"),
 
 ]

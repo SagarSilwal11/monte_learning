@@ -24,4 +24,3 @@ class BaseContent(models.Model):
         excluded_fields = getattr(self.__class__, "excluded_fields", [])
         return {field.name: field for field in self._meta.fields if field.name not in excluded_fields}
 
-
