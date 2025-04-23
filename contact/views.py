@@ -9,7 +9,7 @@ from rest_framework import serializers
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
 from common.pagination import CustomPageNumberPagination
-
+from django.db.models import Q
 
 # Create your views here
 class ContactApi(APIView):
