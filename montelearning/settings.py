@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     "career",
     'activities',
     'contact',
+    "testimonials",
     "rest_framework",
     "rest_framework_simplejwt",
     "phonenumber_field",

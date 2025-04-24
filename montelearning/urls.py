@@ -21,7 +21,8 @@ urlpatterns = [
     path("facility/",include('facilities.urls')),
     path('contact/',include('contact.urls')),
     path('common/',include('common.urls')),  
-    path('user/',include('user.urls'))
+    path('user/',include('user.urls')),
+    path('testimonial/',include('testimonials.urls')),
 
 ]
 urlpatterns+=static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
