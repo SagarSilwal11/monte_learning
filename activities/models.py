@@ -3,9 +3,9 @@ from common.models import BaseContent
 from django.utils.text import slugify
 # Create your models here.
 class ActivitiesModel(BaseContent):
-    keywords=models.CharField(max_length=200,default='')
-    description=models.CharField(max_length=200,default='')
-    slug=models.SlugField(unique=True,default='')
+    keywords=models.CharField(max_length=200,blank=True)
+    description=models.CharField(max_length=200,blank=True)
+    slug=models.SlugField(unique=True,blank=True)
     
     def save(self, *args, **kwargs):
     # Automatically generate slug from heading if not provided
