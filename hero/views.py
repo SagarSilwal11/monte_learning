@@ -110,7 +110,9 @@ class HeroApi(APIView):
             hero = Hero.objects.get(id=pk)
         except Hero.DoesNotExist:
             return Response({'detail': 'Hero not found'}, status=status.HTTP_404_NOT_FOUND)
-
+        if 'image' in request.data:
+            if hero.image:
+                hero.image.delete()
         serializer = HeroSerializers(hero, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -122,7 +124,9 @@ class HeroApi(APIView):
             hero = Hero.objects.get(id=pk)
         except Hero.DoesNotExist:
             return Response({'detail': 'Hero not found'}, status=status.HTTP_404_NOT_FOUND)
-
+        if 'image' in request.data:
+            if hero.image:
+                hero.image.delete()
         serializer = HeroSerializers(hero, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()

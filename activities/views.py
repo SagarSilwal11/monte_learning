@@ -112,7 +112,9 @@ class ActivityApi(APIView):
             activity = ActivitiesModel.objects.get(id=pk)
         except ActivitiesModel.DoesNotExist:
             return Response({'detail': 'Activity not found'}, status=status.HTTP_404_NOT_FOUND)
-        
+        if 'image' in request.data:
+            if activity.image:
+                activity.image.delete()
         serializer = ActivitiesModelSerializers(activity, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -126,7 +128,9 @@ class ActivityApi(APIView):
             return Response({'detail': 'Activity not found'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
-
+        if 'image' in request.data:
+            if activity.image:
+                activity.image.delete()
         serializer = ActivitiesModelSerializers(activity, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()

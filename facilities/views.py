@@ -111,7 +111,9 @@ class FacilityApi(APIView):
             facility = Facilities.objects.get(id=pk)
         except Facilities.DoesNotExist:
             return Response({'detail': 'Facility not found'}, status=status.HTTP_404_NOT_FOUND)
-        
+        if 'icon' in request.data:
+            if facility.icon:
+                facility.icon.delete()
         serializer = FacilitySerializer(facility, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -125,7 +127,9 @@ class FacilityApi(APIView):
             return Response({'detail': 'Facility not found'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
-
+        if 'icon' in request.data:
+            if facility.icon:
+                facility.icon.delete()
         serializer = FacilitySerializer(facility, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
