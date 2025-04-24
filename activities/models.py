@@ -12,25 +12,36 @@ class ActivitiesModel(BaseContent):
         if not self.slug:
             self.slug = slugify(self.heading)
     
-    # Ensure keywords is unique
         if not self.keywords:
-            base_keywords = self.heading
+            base_keywords = slugify(self.heading)
             keywords = base_keywords
             counter = 1
-            while ActivitiesModel.objects.filter(keywords=keywords).exists():
+            qs = ActivitiesModel.objects.filter(keywords__iexact=keywords)
+            if self.pk:
+                qs = qs.exclude(pk=self.pk)
+            while qs.exists():
                 keywords = f"{base_keywords}-{counter}"
                 counter += 1
+                qs = ActivitiesModel.objects.filter(keywords__iexact=keywords)
+                if self.pk:
+                    qs = qs.exclude(pk=self.pk)
             self.keywords = keywords
-    
-    # Ensure description is unique
+
+    # Unique description (case-insensitive and ignore self)
         if not self.description:
             base_description = f"Image for {self.heading}"
             description = base_description
             counter = 1
-            while ActivitiesModel.objects.filter(description=description).exists():
+            qs = ActivitiesModel.objects.filter(description__iexact=description)
+            if self.pk:
+                qs = qs.exclude(pk=self.pk)
+            while qs.exists():
                 description = f"{base_description}-{counter}"
                 counter += 1
+                qs = ActivitiesModel.objects.filter(description__iexact=description)
+                if self.pk:
+                    qs = qs.exclude(pk=self.pk)
             self.description = description
-        
-        # Save the object to the database
+
+    # Save object
         super().save(*args, **kwargs)
