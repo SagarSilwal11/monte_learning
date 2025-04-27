@@ -3,4 +3,4 @@ from testimonials.models import Testimonials
 # Register your models here.
 @admin.register(Testimonials)
 class TestimonialsModel(admin.ModelAdmin):
-    list_display=["quote","name", "designation","image" ,"is_active", "created_at"]
+    list_display=["quote","name", "designation","image" ,"is_featured", "created_at"]

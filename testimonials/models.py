@@ -6,7 +6,7 @@ class Testimonials(models.Model):
     name=models.CharField(max_length=100,help_text="Enter the name of the person ")
     designation=models.CharField(max_length=100,blank=True)
     image=models.ImageField(upload_to="testimonials/",unique=True,blank=True,null=True)
-    is_active=models.BooleanField(default='True')
+    is_featured=models.BooleanField(default='True')
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now=True)
 
