@@ -10,7 +10,7 @@ class TestimonialsApi(APIView):
 
     def get(self, request, pk=None):
         if pk is None:
-            ALLOWED_PARAMS = {"is_active", "created_at", "search", "page_size", "page"}
+            ALLOWED_PARAMS = {"status", "is_featured","created_at", "search", "page_size", "page"}
             unexpected = set(request.query_params.keys()) - ALLOWED_PARAMS
             if unexpected:
                 return Response(
@@ -30,24 +30,41 @@ class TestimonialsApi(APIView):
                     else:
                         testimonials = testimonials.order_by("-id")
 
-                # Filter by is_active
-                is_active = request.query_params.get("is_active", None)
-                if is_active is not None:
-                    if is_active.lower() == 'true':
-                        testimonials = testimonials.filter(is_active=True)
-                    elif is_active.lower() == 'false':
-                        testimonials = testimonials.filter(is_active=False)
+                # Filter by status
+                is_status = request.query_params.get("status", None)
+                if is_status is not None:
+                    if is_status.lower() == 'true':
+                        testimonials = testimonials.filter(status=True)
+                    elif is_status.lower() == 'false':
+                        testimonials = testimonials.objects.filter(status=False)
                     else:
                         return Response(
-                            {"detail": 'Invalid value for is_active. Must be "true" or "false".'},
+                            {"detail": 'Invalid value for status. Must be "true" or "false".'},
                             status=status.HTTP_400_BAD_REQUEST
                         )
 
-                # Search by name
-                search = request.query_params.get("search", None)
-                if search:
-                    testimonials = testimonials.filter(name__icontains=search)
-
+                 
+                featured_filter=request.query_params.get("is_featured",None)
+                if featured_filter is not None:
+                    try:
+                        if featured_filter.lower()=='true':
+                            testimonials=testimonials.filter(is_featured=True)
+                        elif featured_filter.lower()=='false':
+                            testimonials=testimonials.filter(is_featured=False)
+                        else:
+                            return Response({
+                                'detail':'Invalid value for the featured'
+                            },status=status.HTTP_400_BAD_REQUEST)
+                    except:
+                        return Response({'detail':"Invalid value"},status=status.HTTP_400_BAD_REQUEST)
+            
+            
+                try:
+                    search = request.query_params.get("search", None)
+                    if search:
+                            testimonials = testimonials.filter(designation__istartswith=search)
+                except Exception as e:
+                    return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
                 # Pagination
                 paginator = CustomPageNumberPagination()
                 paginated_queryset = paginator.paginate_queryset(testimonials, request)
