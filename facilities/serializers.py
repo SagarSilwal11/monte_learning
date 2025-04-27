@@ -15,7 +15,7 @@ class FacilitySerializer(serializers.ModelSerializer):
     class Meta:
         model=Facilities
         fields=['id',
-             'heading', 'content','image',"icon" ,'created_at', 'updated_at', 'is_featured', 'status', 'keywords', 'description', 'slug','short_content']
+             'heading', 'content','image',"icon" ,'created_at', 'updated_at', 'is_featured', 'status','short_content']
 
     def get_short_content(self,obj):
         return obj.content[:100] + '...' if len(obj.content)> 100 else obj.content
