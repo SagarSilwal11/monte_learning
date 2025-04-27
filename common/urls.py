@@ -1,6 +1,6 @@
 
 from django.urls import path,include
-from common.views import CommonApi
+from common.views import CommonApi,CommonCountApi
 from rest_framework.routers import DefaultRouter
 from common.views import AssignGroupApi,AssignPermissionApi,CustomTokenObtainPairView
 
@@ -22,6 +22,7 @@ urlpatterns = [
     path("refreshtoken",TokenRefreshView.as_view(),name="token_refresh"),
     path("verifytoken",TokenVerifyView.as_view(),name="token_verify"),
     path("common/gettoken", CustomTokenObtainPairView.as_view(), name="token_obtain_view"),
-    path("api/all",CommonApi.as_view(),name='common')
+    path("api/all",CommonApi.as_view(),name='common'),
+    path("api/count",CommonCountApi.as_view(),name='common'),
 
 ]
