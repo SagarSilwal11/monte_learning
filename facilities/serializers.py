@@ -2,7 +2,7 @@ from rest_framework import serializers
 from activities.models import ActivitiesModel
 from django.core.exceptions import ValidationError
 from django.conf import settings
-class ActivitiesModelSerializers(serializers.ModelSerializer):
+class FacilitySerializer(serializers.ModelSerializer):
     # image=serializers.SerializerMethodField()# custom method for full url
     # def get_image(self,obj):
     #     request=self.context.get("request")# get request context
