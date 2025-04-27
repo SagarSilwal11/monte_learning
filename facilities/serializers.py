@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from activities.models import ActivitiesModel
+from facilities.models import Facilities
 from django.core.exceptions import ValidationError
 from django.conf import settings
 class FacilitySerializer(serializers.ModelSerializer):
@@ -13,7 +13,7 @@ class FacilitySerializer(serializers.ModelSerializer):
     image=serializers.ImageField(use_url=True)
     short_content=serializers.SerializerMethodField()
     class Meta:
-        model=ActivitiesModel
+        model=Facilities
         fields=['id',
              'heading', 'content','image',"icon" ,'created_at', 'updated_at', 'is_featured', 'status', 'keywords', 'description', 'slug','short_content']
 
