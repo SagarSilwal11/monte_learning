@@ -4,7 +4,7 @@ from common.models import BaseContent
 class Facilities(BaseContent):
     
     icon=models.ImageField(upload_to='icons/')
-    image=None
+    
 
     def __str__(self):
         return self.heading
