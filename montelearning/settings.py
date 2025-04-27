@@ -209,7 +209,8 @@ PHONENUMBER_DEFAULT_REGION = 'NP'
 CORS_ALLOWED_ORIGINS = [
     "http://montessori.website",  # Allow requests from your domain
          # Allow requests from localhost for development
-    "http://localhost:5173",      # Allow requests from React app running on port 5173
+    "http://localhost:5173",
+          "http://localhost:3000"      # Allow requests from React app running on port 5173
 ]
 # CSRF_TRUSTED_ORIGINS = [
 #     "https://montessori.website"  # Trust frontend for CSRF protection
