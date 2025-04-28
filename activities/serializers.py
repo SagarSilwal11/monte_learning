@@ -20,3 +20,8 @@ class ActivitiesModelSerializers(serializers.ModelSerializer):
         if len(value) > 200:
             raise ValidationError("Please provide a content shorter than 200 characters.")
         return value
+
+class ActivityDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=ActivitiesModel
+        fields=["id","image","heading","content","created_at","updated_at","status"]

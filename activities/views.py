@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from activities.models import ActivitiesModel
-from activities.serializers import ActivitiesModelSerializers
+from activities.serializers import ActivitiesModelSerializers,ActivityDetailSerializer
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
 from common.pagination import CustomPageNumberPagination
@@ -152,7 +152,7 @@ class ActivityApiDetails(APIView):
         if slug:
             try:
                 activity = ActivitiesModel.objects.get(slug=slug)
-                serializer = ActivitiesModelSerializers(activity)
+                serializer = ActivityDetailSerializer(activity)
                 return Response(serializer.data, status=status.HTTP_200_OK)
             except ActivitiesModel.DoesNotExist:
                 return Response({'detail': 'Activity with slug not found'}, status=status.HTTP_404_NOT_FOUND)
