@@ -146,3 +146,18 @@ class ActivityApi(APIView):
             return Response({'detail': 'Activity not found'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+class ActivityApiDetails(APIView):
+    def get(self, request, slug=None):
+        if slug:
+            try:
+                activity = ActivitiesModel.objects.get(slug=slug)
+                serializer = ActivitiesModelSerializers(activity)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            except ActivitiesModel.DoesNotExist:
+                return Response({'detail': 'Activity with slug not found'}, status=status.HTTP_404_NOT_FOUND)
+            except Exception as e:
+                
+                return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        else:
+            return Response({'detail': 'Slug parameter is required'}, status=status.HTTP_400_BAD_REQUEST)

@@ -5,6 +5,9 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
     TokenVerifyView
 )
+from activities.views import ActivityApiDetails
+
+
 
 urlpatterns = [
    
@@ -16,5 +19,5 @@ urlpatterns = [
     path("activityapi/update/<int:pk>",ActivityApi.as_view(),name="activity_update"),
     path("activityapi/patch/<int:pk>",ActivityApi.as_view(),name="activity_updates"),
     path("activityapi/delete/<int:pk>",ActivityApi.as_view(),name="activity_delete"),
-
+    path("activityapi/<slug:slug>",ActivityApiDetails.as_view(),name="activity_slug"),
 ]
